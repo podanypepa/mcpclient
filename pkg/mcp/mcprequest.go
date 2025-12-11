@@ -1,4 +1,4 @@
-package main
+package mcp
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func doMCPRequest(
+func DoMCPRequest(
 	ctx context.Context,
 	client *http.Client,
 	url string,
@@ -42,15 +42,12 @@ func doMCPRequest(
 		return nil, nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer func() {
-	}()
+	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		resp.Body.Close()
 		return resp, nil, fmt.Errorf("read body: %w", err)
 	}
-	_ = resp.Body.Close()
 
 	return resp, data, nil
 }

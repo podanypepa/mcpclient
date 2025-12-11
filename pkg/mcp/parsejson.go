@@ -1,11 +1,11 @@
-package main
+package mcp
 
 import (
 	"fmt"
 	"strings"
 )
 
-func parseSSEOrJSON(raw []byte) ([]byte, error) {
+func ParseSSEOrJSON(raw []byte) ([]byte, error) {
 	text := strings.TrimSpace(string(raw))
 	if text == "" {
 		return nil, fmt.Errorf("empty response body")

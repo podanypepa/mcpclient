@@ -1,4 +1,4 @@
-package main
+package mcp
 
 import (
 	"context"
@@ -7,20 +7,20 @@ import (
 	"net/http"
 )
 
-func listTools(
+func ListTools(
 	ctx context.Context,
 	client *http.Client,
 	url string,
 	token string,
 	sessionID string,
 ) error {
-	req := map[string]any{
-		"jsonrpc": "2.0",
-		"id":      2,
-		"method":  "tools/list",
+	req := JSONRPCRequest{
+		JSONRPC: "2.0",
+		ID:      2,
+		Method:  "tools/list",
 	}
 
-	resp, body, err := doMCPRequest(ctx, client, url, token, sessionID, req)
+	resp, body, err := DoMCPRequest(ctx, client, url, token, sessionID, req)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func listTools(
 		return fmt.Errorf("tools/list HTTP status %s, body: %s", resp.Status, string(body))
 	}
 
-	jsonBytes, err := parseSSEOrJSON(body)
+	jsonBytes, err := ParseSSEOrJSON(body)
 	if err != nil {
 		return fmt.Errorf("parse tools/list body: %w", err)
 	}

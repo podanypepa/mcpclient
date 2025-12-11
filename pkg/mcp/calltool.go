@@ -1,42 +1,41 @@
-package main
+package mcp
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
-func callNowTool(
+func CallTool(
 	ctx context.Context,
 	client *http.Client,
 	url string,
 	token string,
 	sessionID string,
+	toolName string,
+	toolArgs map[string]any,
 ) error {
-	req := map[string]any{
-		"jsonrpc": "2.0",
-		"id":      3,
-		"method":  "tools/call",
-		"params": map[string]any{
-			"name": "now",
-			"arguments": map[string]any{
-				"format": time.RFC3339,
-			},
+	req := JSONRPCRequest{
+		JSONRPC: "2.0",
+		ID:      3,
+		Method:  "tools/call",
+		Params: CallToolParams{
+			Name:      toolName,
+			Arguments: toolArgs,
 		},
 	}
 
-	resp, body, err := doMCPRequest(ctx, client, url, token, sessionID, req)
+	resp, body, err := DoMCPRequest(ctx, client, url, token, sessionID, req)
 	if err != nil {
 		return err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("tools/call(now) HTTP status %s, body: %s", resp.Status, string(body))
+		return fmt.Errorf("tools/call(%s) HTTP status %s, body: %s", toolName, resp.Status, string(body))
 	}
 
-	jsonBytes, err := parseSSEOrJSON(body)
+	jsonBytes, err := ParseSSEOrJSON(body)
 	if err != nil {
 		return fmt.Errorf("parse tools/call body: %w", err)
 	}
@@ -56,7 +55,7 @@ func callNowTool(
 		return fmt.Errorf("unmarshal tools/call result: %w", err)
 	}
 
-	fmt.Println("Result from tool 'now':")
+	fmt.Printf("Result from tool '%s':\n", toolName)
 	for i, c := range result.Content {
 		fmt.Printf("  [%d] type=%s text=%s\n", i, c.Type, c.Text)
 	}

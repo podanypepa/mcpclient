@@ -1,4 +1,4 @@
-package main
+package mcp
 
 import (
 	"context"
@@ -6,19 +6,19 @@ import (
 	"net/http"
 )
 
-func sendInitializedNotification(
+func SendInitializedNotification(
 	ctx context.Context,
 	client *http.Client,
 	url string,
 	token string,
 	sessionID string,
 ) error {
-	req := map[string]any{
-		"jsonrpc": "2.0",
-		"method":  "notifications/initialized",
+	req := JSONRPCNotification{
+		JSONRPC: "2.0",
+		Method:  "notifications/initialized",
 	}
 
-	resp, body, err := doMCPRequest(ctx, client, url, token, sessionID, req)
+	resp, body, err := DoMCPRequest(ctx, client, url, token, sessionID, req)
 	if err != nil {
 		return err
 	}

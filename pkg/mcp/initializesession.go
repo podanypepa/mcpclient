@@ -1,4 +1,4 @@
-package main
+package mcp
 
 import (
 	"context"
@@ -7,31 +7,31 @@ import (
 	"net/http"
 )
 
-func initializeSession(
+func InitializeSession(
 	ctx context.Context,
 	client *http.Client,
 	url string,
 	token string,
 ) (string, error) {
-	req := map[string]any{
-		"jsonrpc": "2.0",
-		"id":      1,
-		"method":  "initialize",
-		"params": map[string]any{
-			"protocolVersion": "2024-11-05",
-			"capabilities": map[string]any{
+	req := JSONRPCRequest{
+		JSONRPC: "2.0",
+		ID:      1,
+		Method:  "initialize",
+		Params: InitializeParams{
+			ProtocolVersion: "2024-11-05",
+			Capabilities: map[string]any{
 				"tools":     map[string]any{},
 				"resources": map[string]any{},
 				"prompts":   map[string]any{},
 			},
-			"clientInfo": map[string]any{
-				"name":    "go-mcp-http-test-client",
-				"version": "0.1.0",
+			ClientInfo: ClientInfo{
+				Name:    "mcpclient",
+				Version: "0.1.0",
 			},
 		},
 	}
 
-	resp, body, err := doMCPRequest(ctx, client, url, token, "", req)
+	resp, body, err := DoMCPRequest(ctx, client, url, token, "", req)
 	if err != nil {
 		return "", err
 	}
@@ -45,7 +45,7 @@ func initializeSession(
 		return "", fmt.Errorf("missing Mcp-Session-Id header in initialize response")
 	}
 
-	jsonBytes, err := parseSSEOrJSON(body)
+	jsonBytes, err := ParseSSEOrJSON(body)
 	if err != nil {
 		return "", fmt.Errorf("parse initialize body: %w", err)
 	}
