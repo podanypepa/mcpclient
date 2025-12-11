@@ -1,3 +1,4 @@
+// Package mcp implements functions to interact with the MCP API.
 package mcp
 
 import (
@@ -7,6 +8,7 @@ import (
 	"net/http"
 )
 
+// CallTool calls a tool via the MCP API and prints the result.
 func CallTool(
 	ctx context.Context,
 	client *http.Client,

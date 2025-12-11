@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// SendInitializedNotification sends a notifications/initialized notification to the MCP API.
 func SendInitializedNotification(
 	ctx context.Context,
 	client *http.Client,

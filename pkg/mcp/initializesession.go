@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// InitializeSession initializes a session with the MCP API and returns the session ID.
 func InitializeSession(
 	ctx context.Context,
 	client *http.Client,

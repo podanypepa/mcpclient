@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// ParseSSEOrJSON parses a response body that may be either raw JSON or
 func ParseSSEOrJSON(raw []byte) ([]byte, error) {
 	text := strings.TrimSpace(string(raw))
 	if text == "" {

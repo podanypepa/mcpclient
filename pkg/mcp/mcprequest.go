@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// DoMCPRequest performs an HTTP POST request to the specified MCP URL with the given payload.
 func DoMCPRequest(
 	ctx context.Context,
 	client *http.Client,

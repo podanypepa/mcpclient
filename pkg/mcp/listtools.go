@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// ListTools lists available tools via the MCP API and prints them.
 func ListTools(
 	ctx context.Context,
 	client *http.Client,
